@@ -16,6 +16,7 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -52,16 +53,20 @@ class PurchaseServiceTest {
 
     @Test
     void getAllPurchases_ReturnsJSONArray() {
-        Purchase mockPurchase1 = mock(Purchase.class);
-        when(mockPurchase1.toString()).thenReturn("{\"id\":\"1\"}");
-        Purchase mockPurchase2 = mock(Purchase.class);
-        when(mockPurchase2.toString()).thenReturn("{\"id\":\"2\"}");
+        Purchase p1 = new Purchase("1", "seller_1", "buyer_1", "prod_1", new Date(), new BigDecimal("10.50"));
+        Purchase p2 = new Purchase("2", "seller_2", "buyer_2", "prod_2", new Date(), new BigDecimal("20.75"));
 
-        when(purchaseRepository.getAllPurchases()).thenReturn(Arrays.asList(mockPurchase1, mockPurchase2));
+        when(purchaseRepository.getAllPurchases()).thenReturn(Arrays.asList(p1, p2));
 
         String result = purchaseService.getAllPurchases();
 
-        assertEquals("[{\"id\":\"1\"},{\"id\":\"2\"}]", result);
+        assertTrue(result.startsWith("["), "Should be a JSON Array");
+        assertTrue(result.endsWith("]"), "Should be a JSON Array");
+        assertTrue(result.contains("\"id\":\"1\""));
+        assertTrue(result.contains("\"id\":\"2\""));
+        assertTrue(result.contains("\"sellerID\":\"seller_1\""));
+        assertTrue(result.contains("\"buyerID\":\"buyer_2\""));
+
         verify(purchaseRepository, times(1)).getAllPurchases();
     }
 
@@ -77,28 +82,32 @@ class PurchaseServiceTest {
     @Test
     void getPurchasesBySellerID_ReturnsJSONArray() {
         String sellerID = "seller_1";
-        Purchase mockPurchase = mock(Purchase.class);
-        when(mockPurchase.toString()).thenReturn("{\"sellerID\":\"seller_1\"}");
+        Purchase p1 = new Purchase("1", sellerID, "buyer_1", "prod_1", new Date(), new BigDecimal("15.00"));
 
-        when(purchaseRepository.getPurchasesBySellerID(sellerID)).thenReturn(Collections.singletonList(mockPurchase));
+        when(purchaseRepository.getPurchasesBySellerID(sellerID)).thenReturn(Collections.singletonList(p1));
 
         String result = purchaseService.getPurchasesBySellerID(sellerID);
 
-        assertEquals("[{\"sellerID\":\"seller_1\"}]", result);
+        assertTrue(result.startsWith("["));
+        assertTrue(result.contains("\"id\":\"1\""));
+        assertTrue(result.contains("\"sellerID\":\"seller_1\""));
+
         verify(purchaseRepository, times(1)).getPurchasesBySellerID(sellerID);
     }
 
     @Test
     void getPurchasesByBuyerID_ReturnsJSONArray() {
         String buyerID = "user_1";
-        Purchase mockPurchase = mock(Purchase.class);
-        when(mockPurchase.toString()).thenReturn("{\"buyerID\":\"user_1\"}");
+        Purchase p1 = new Purchase("1", "seller_1", buyerID, "prod_1", new Date(), new BigDecimal("25.00"));
 
-        when(purchaseRepository.getPurchasesByBuyerID(buyerID)).thenReturn(Collections.singletonList(mockPurchase));
+        when(purchaseRepository.getPurchasesByBuyerID(buyerID)).thenReturn(Collections.singletonList(p1));
 
         String result = purchaseService.getPurchasesByBuyerID(buyerID);
 
-        assertEquals("[{\"buyerID\":\"user_1\"}]", result);
+        assertTrue(result.startsWith("["));
+        assertTrue(result.contains("\"id\":\"1\""));
+        assertTrue(result.contains("\"buyerID\":\"user_1\""));
+
         verify(purchaseRepository, times(1)).getPurchasesByBuyerID(buyerID);
     }
 

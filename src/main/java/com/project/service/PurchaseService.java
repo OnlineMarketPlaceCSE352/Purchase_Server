@@ -90,7 +90,7 @@ public class PurchaseService {
         StringBuilder responseBuilder = new StringBuilder();
         responseBuilder.append("[");
         for (int i = 0; i < purchases.size(); i++) {
-            responseBuilder.append(purchases.get(i).toString());
+            responseBuilder.append(PurchaseMapper.mapToJSON(purchases.get(i)));
             if (i < purchases.size() - 1) {
                 responseBuilder.append(",");
             }
