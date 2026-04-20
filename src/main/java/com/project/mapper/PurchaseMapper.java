@@ -5,7 +5,7 @@ import com.project.model.Purchase;
 import tools.jackson.databind.ObjectMapper;
 
 public class PurchaseMapper {
-    private static ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     public static String mapToJSON(Purchase purchase) {
         try {
