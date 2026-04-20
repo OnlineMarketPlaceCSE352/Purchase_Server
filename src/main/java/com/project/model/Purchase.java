@@ -19,17 +19,4 @@ public class Purchase {
     private String productID;
     private Date date;
     private BigDecimal price;
-
-    @Override
-    public String toString() {
-        ObjectMapper mapper = new ObjectMapper();
-
-        try {
-            return mapper.writeValueAsString(this);
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return null;
-    }
 }

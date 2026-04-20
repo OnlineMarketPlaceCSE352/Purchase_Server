@@ -1,6 +1,7 @@
 package com.project.dto;
 
 import com.project.util.Method;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import java.util.Map;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class Request {
     private Method method;
     private String path;
