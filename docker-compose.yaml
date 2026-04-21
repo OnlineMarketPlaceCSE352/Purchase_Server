@@ -1,0 +1,14 @@
+# docker-compose.yml in Purchase_Server root
+services:
+  purchase-db:
+    image: mariadb:latest
+    environment:
+      MARIADB_ROOT_PASSWORD: rootpass
+      MARIADB_DATABASE: purchase_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - purchase-data:/var/lib/mysql
+
+volumes:
+  purchase-data:
