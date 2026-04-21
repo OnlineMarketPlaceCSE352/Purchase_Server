@@ -7,12 +7,15 @@ import com.project.util.Method;
 import com.project.util.RestHandler;
 import com.project.util.RouteKey;
 import com.project.util.SecurityUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.net.Socket;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class PurchaseController implements Runnable {
     private final Socket socket;
     private final PurchaseService purchaseService;
@@ -119,6 +122,7 @@ public class PurchaseController implements Runnable {
             response.setBody(purchaseService.getAllPurchases());
             return response;
         } catch (Exception e) {
+            log.error("Error retrieving purchases: ", e);
             return errorResponse(500, "Internal Server Error", "Failed to retrieve purchases");
         }
     }
@@ -176,6 +180,7 @@ public class PurchaseController implements Runnable {
             response.setBody(purchaseService.getPurchasesByBuyerID(buyerID));
             return response;
         } catch (Exception e) {
+            log.error("Error retrieving purchase history for {}: ", buyerID, e);
             return errorResponse(500, "Internal Server Error", "Failed to retrieve purchase history");
         }
     }
@@ -193,6 +198,7 @@ public class PurchaseController implements Runnable {
             response.setBody(purchaseService.getPurchasesBySellerID(sellerID));
             return response;
         } catch (Exception e) {
+            log.error("Error retrieving sales history for {}: ", sellerID, e);
             return errorResponse(500, "Internal Server Error", "Failed to retrieve sales history");
         }
     }
